@@ -6,7 +6,7 @@ $nodeId = 2;
 // End Setup
 
 $url = 'http://127.0.0.1:8083/node?node_id=' . $nodeId . '&type=action&action=testNode&apikey=' . $apizwave;
-$contents = utf8_encode(file_get_contents($url));
+$contents = file_get_contents($url);
 //$scenario->setLog('Contents :'.$contents);
 $results = json_decode($contents);
 $success = $results->state;
