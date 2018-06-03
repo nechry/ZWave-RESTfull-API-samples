@@ -1,4 +1,3 @@
-<?php
 // Setup
 // Jeedom configuration/API/Clef API Z-Wave
 $apizwave = 'yourZwaveAPIKey';
