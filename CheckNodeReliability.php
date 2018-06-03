@@ -1,3 +1,4 @@
+<?php
 // Setup
 // Jeedom configuration/API/Clef API Z-Wave
 $apizwave = 'yourZwaveAPIKey';
@@ -18,22 +19,33 @@ if ($success != 'ok') {
     $notificationDescription = $results->result->last_notification->description;
     $scenario->setLog('Notification receive time :' . date("Y-m-j H:i:s", $receiveTime));
     $scenario->setLog('             description :' . $notificationDescription);
-    $now = time();
-    // check the delta
-    $delta = $now - $receiveTime;
-    $timeout = $delta / 60 % 60;
-    $scenario->setLog('Last ping delta :' . $timeout);
-    // check if notification has occur more the 1 minute ago
-    if ($timeout > 1) {
-        // add log entry
-        $scenario->setLog('Notification stop working :' . $timeout);
-        // use a notification command action to send the warning message
+    // init title and message to empty
+    $title = 'A ZWave node no longer seems to respond';
+    $message = '';
+    // check if node is presume dead
+    if ($notificationDescription == 'Dead') {
+        $message = 'The Z Wave controller marked the Node Id ' . $nodeId . ' as presumed dead';
+    } else {
+        $now = time();
+        // check the delta
+        $delta = $now - $receiveTime;
+        $timeout = $delta / 60 % 60;
+        $scenario->setLog('Last ping delta :' . $timeout);
+        // check if notification has occur more the 1 minute ago
+        if ($timeout > 1) {
+            // add log entry
+            $scenario->setLog('Notification stop working :' . $timeout);
+            // use a notification command action to send the warning message
+            $message = 'No response received after node test after ' . $timeout . ' minutes';
+        }
+    }
+    if ($message != '') {
         $cmd = cmd::byString('#[Notifications][Telegram Bot][Tous]#');
         if (is_object($cmd)) {
-            $option = array('title' => 'A ZWave node no longer seems to respond', 'message' => 'No response received after node test after ' . $timeout . ' minutes');
+            $option = array('title' => $title, 'message' => $message);
             $cmd->execCmd($option);
-        }else {
-            $scenario->setLog('Error: Notification Command Was Not Found');
+        } else {
+            $scenario->setLog('Error: the notification command did not exist');
         }
     }
 }
