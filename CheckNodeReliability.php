@@ -1,9 +1,16 @@
+// Setup
+// Jeedom configuration/API/Clef API Z-Wave
+$apizwave = '';
+// the node Id to perform the ping
+$nodeId = 2;
+// timeout
+$timeout = 60;
+// End Setup
+
 // time of the testNode command
 $send_time = $scenario->getData("ZAPI_NodePingTime");
 $scenario->removeData(ZAPI_NodePingTime);
-if (is_object($send_time)== false) {
-    $send_time = strtotime("-" . $timeout . " second", time());
-}
+// get node health data
 $url = 'http://127.0.0.1:8083/node?node_id=' . $nodeId . '&type=info&info=getHealth&apikey=' . $apizwave;
 $contents = utf8_encode(file_get_contents($url));
 //$scenario->setLog('Contents :' . $contents);
@@ -12,7 +19,7 @@ $success = $results->state;
 if ($success != 'ok') {
     $scenario->setLog('ZAPI node getHealth return an error: ' . $results["result"]);
 } else {
-    // read last notification attributes info
+    // read the attributes of the last notification
     $receiveTime = $results->result->last_notification->receiveTime;
     $description = $results->result->last_notification->description;
     $scenario->setLog('Receive ' . $description . ' notification at time :' . date("Y-m-j H:i:s", $receiveTime));
