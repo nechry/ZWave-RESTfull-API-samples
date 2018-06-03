@@ -1,16 +1,9 @@
-// Setup
-// Jeedom configuration/API/Clef API Z-Wave
-$apizwave = 'yourZwaveAPIKey';
-// the node Id to perform the ping
-$nodeId = 2;
-// timeout for a echo
-$timeout = 60;
-// End Setup
-
-
 // time of the testNode command
-$send_time = strtotime("-" . ($timeout + 2) . " second", time());
-
+$send_time = $scenario->getData("ZAPI_NodePingTime");
+$scenario->removeData(ZAPI_NodePingTime);
+if (is_object($send_time)== false) {
+    $send_time = strtotime("-" . $timeout . " second", time());
+}
 $url = 'http://127.0.0.1:8083/node?node_id=' . $nodeId . '&type=info&info=getHealth&apikey=' . $apizwave;
 $contents = utf8_encode(file_get_contents($url));
 //$scenario->setLog('Contents :' . $contents);
@@ -31,11 +24,11 @@ if ($success != 'ok') {
     } else {
         // check the delta
         $delta = $receiveTime - $send_time;
-        $scenario->setLog('Recive a echo in :' . $delta . ' seconds.' . $receiveTime . ' - ' . $send_time);
+        $scenario->setLog('Recive a echo in :' . $delta . ' seconds.');
         // check if notification has occur more the 1 minute ago
         if ($delta > $timeout) {
             // use a notification command action to send the warning message
-            $message = 'No response received from ping after ' . $delta . ' seconds';
+            $message = 'No response received after node test after ' . $delta . ' seconds';
         }
     }
     if ($message != '') {
