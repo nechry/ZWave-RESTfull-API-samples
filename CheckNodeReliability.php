@@ -1,4 +1,3 @@
-<?php
 // Setup
 // Jeedom configuration/API/Clef API Z-Wave
 $apizwave = 'yourZwaveAPIKey';
@@ -29,17 +28,16 @@ if ($success != 'ok') {
         $now = time();
         // check the delta
         $delta = $now - $receiveTime;
-        $timeout = $delta / 60 % 60;
-        $scenario->setLog('Last ping delta :' . $timeout);
+        $scenario->setLog('Last ping delta :' . $delta . 'sec.');
         // check if notification has occur more the 1 minute ago
-        if ($timeout > 1) {
-            // add log entry
-            $scenario->setLog('Notification stop working :' . $timeout);
+        if ($timeout > 60) {
             // use a notification command action to send the warning message
-            $message = 'No response received after node test after ' . $timeout . ' minutes';
+            $message = 'No response received after node test after ' . $delta . ' seconds';
         }
     }
     if ($message != '') {
+        // add log entry
+        $scenario->setLog($message);
         $cmd = cmd::byString('#[Notifications][Telegram Bot][Tous]#');
         if (is_object($cmd)) {
             $option = array('title' => $title, 'message' => $message);
