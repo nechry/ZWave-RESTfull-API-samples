@@ -1,6 +1,6 @@
 // Setup
 // Jeedom configuration/API/Clef API Z-Wave
-$apizwave = '';
+$apizwave = 'yourZwaveAPIKey';
 // the node Id to perform the ping
 $nodeId = 2;
 // timeout
