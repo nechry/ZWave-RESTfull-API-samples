@@ -16,9 +16,9 @@ foreach ($nodeIds as &$nodeId) {
            $scenario->setLog('ZAPI node testNode return an error: ' . $results["result"]);
         }
         else{
-          if (getNodeFailed(&nodeId)) {
-            //sleep for 3 seconds
-            sleep(3);          
+          //sleep for 3 seconds
+          sleep(3); 
+          if (getNodeFailed(&nodeId)) {                     
             // use special zwave command hasNodeFailed to test
             $url_hasNodeFailed = 'http://localhost:8083/node?node_id=' . $nodeId . '&type=action&action=hasNodeFailed&apikey=' . $apizwave;
             $content = file_get_contents($url_hasNodeFailed);            
