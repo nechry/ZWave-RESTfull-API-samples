@@ -11,5 +11,5 @@ $content = file_get_contents($url_health);
 $results = json_decode($content, true);
 $success = $results["state"];
 if ($success != 'ok') {
-    $scenario->setLog('ZAPI network getHealth return an error: ' . $results["result"]);
+    $scenario->setLog('ZAPI controller healNetwork return an error: ' . $results["result"]);
 }
