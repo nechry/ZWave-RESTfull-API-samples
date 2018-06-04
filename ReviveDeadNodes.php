@@ -1,7 +1,7 @@
 // Setup
 // Jeedom configuration/API/Clef API Z-Wave
 $apizwave = 'yourZwaveAPIKey';
-// the node Id to perform the ping
+// list of nodes to perform a check
 $nodeIds = array(107, 162, 141);
 // End Setup
 
@@ -38,8 +38,7 @@ foreach ($nodeIds as $nodeId) {
 }
 
 
-function getNodeFailed($nodeId, $apizwave, $scenario)
-{
+function getNodeFailed($nodeId, $apizwave, $scenario){
     $url_health = 'http://localhost:8083/node?node_id=' . $nodeId . '&type=info&info=getHealth&apikey=' . $apizwave;
     $content = file_get_contents($url_health);
     //$scenario->setLog($content);
