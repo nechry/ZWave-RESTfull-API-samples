@@ -27,6 +27,10 @@ foreach ($nodeIds as &$nodeId) {
             if ($success != 'ok') {
                $scenario->setLog('ZAPI node hasNodeFailed return an error: ' . $results["result"]);
             }
+            else{
+                //sleep for 3 seconds
+                sleep(3); 
+            }
           }
        }
    }
