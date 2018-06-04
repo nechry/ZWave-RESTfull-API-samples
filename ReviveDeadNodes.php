@@ -5,7 +5,7 @@ $apizwave = 'yourZwaveAPIKey';
 $nodeIds = array(2, 5, 31);
 // End Setup
 
-foreach (nodeIds as &nodeId) {    
+foreach ($nodeIds as &nodeId) {    
     if (getNodeFailed(&nodeId)) {
         //try first a ping
         $url_ping = 'http://localhost:8083/node?node_id=' . $nodeId . '&type=action&action=testNode&apikey=' . $apizwave;
